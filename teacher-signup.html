@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher Signup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <video autoplay muted loop id="bg-video">
+        <source src="background.mp4" type="video/mp4">
+    </video>
+
+    <!-- Centered Big Image + Signup Form -->
+    <div class="center-image">
+        <div class="container">
+            <h2>Teacher Signup</h2>
+
+            <input type="text" id="name" placeholder="Full Name">
+            <input type="email" id="email" placeholder="Teacher Email">
+            <input type="password" id="password" placeholder="Create Password">
+
+            <button onclick="signupTeacher()">Sign Up</button>
+
+            <p class="small-text">
+                Already have an account? <a href="teacher-login.html">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function signupTeacher() {
+            alert("Teacher Account Created!");
+            window.location = "teacher-login.html";
+        }
+    </script>
+
+</body>
+
+</html>

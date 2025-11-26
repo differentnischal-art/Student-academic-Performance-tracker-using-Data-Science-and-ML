@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student Signup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Fullscreen background video -->
+    <video autoplay muted loop id="bg-video">
+        <source src="background.mp4" type="video/mp4">
+    </video>
+
+    <!-- Centered Big Image + Signup Form -->
+    <div class="center-image">
+        <div class="container">
+            <h2>Student Signup</h2>
+            <input type="text" id="name" placeholder="Full Name">
+            <input type="email" id="email" placeholder="Student Email">
+            <input type="password" id="password" placeholder="Create Password">
+
+            <button id="signupBtn">Sign Up</button>
+
+            <!-- Message container -->
+            <p id="signupMessage" style="margin-top:10px;"></p>
+
+            <p class="small-text">
+                Already have an account? <a href="student-login.html">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const messageEl = document.getElementById("signupMessage");
+
+        // Simple email validation
+        function isValidEmail(email) {
+            const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return pattern.test(email);
+        }
+
+        document.getElementById("signupBtn").addEventListener("click", async function () {
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+
+            if (!name || !email || !password) {
+                messageEl.textContent = "Please fill all fields.";
+                messageEl.style.color = "red";
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                messageEl.textContent = "Please enter a valid email address.";
+                messageEl.style.color = "red";
+                return;
+            }
+
+            try {
+                const res = await fetch('http://localhost:3000/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    messageEl.textContent = data.message;
+                    messageEl.style.color = "green";
+
+                    setTimeout(() => {
+                        window.location.href = "student-login.html";
+                    }, 1500);
+                } else {
+                    messageEl.textContent = data.message;
+                    messageEl.style.color = "red";
+                }
+            } catch (err) {
+                console.error(err);
+                messageEl.textContent = "Server error. Make sure backend is running.";
+                messageEl.style.color = "red";
+            }
+        });
+    </script>
+</body>
+
+</html>

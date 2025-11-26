@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Fullscreen background video -->
+    <video autoplay muted loop id="bg-video">
+        <source src="background.mp4" type="video/mp4">
+    </video>
+
+    <!-- Centered Big Image + Login Form -->
+    <div class="center-image">
+        <div class="container">
+            <h2>Student Login</h2>
+            <input type="email" placeholder="Student Email" id="email">
+            <input type="password" placeholder="Password" id="password">
+            <button id="loginBtn">Login</button>
+
+            <!-- Message container -->
+            <p id="loginMessage" style="margin-top:10px;"></p>
+
+            <p class="small-text">
+                <a href="student-signup.html">Create Student Account</a> |
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const messageEl = document.getElementById("loginMessage");
+
+        document.getElementById("loginBtn").addEventListener("click", async function () {
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+
+            // Email validation regex
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!email || !password) {
+                messageEl.textContent = "Please enter email and password.";
+                messageEl.style.color = "red";
+                return;
+            }
+
+            if (!emailPattern.test(email)) {
+                messageEl.textContent = "Please enter a valid email address.";
+                messageEl.style.color = "red";
+                return;
+            }
+
+            try {
+                const res = await fetch('http://localhost:3000/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    messageEl.textContent = data.message; // "Login successful"
+                    messageEl.style.color = "green";
+
+                    // Redirect after 1.5 seconds
+                    setTimeout(() => {
+                        window.location.href = "upload.html";
+                    }, 1500);
+                } else {
+                    messageEl.textContent = data.message; // e.g., "Invalid email or password"
+                    messageEl.style.color = "red";
+                }
+            } catch (err) {
+                console.error(err);
+                messageEl.textContent = "Server error. Make sure backend is running.";
+                messageEl.style.color = "red";
+            }
+        });
+    </script>
+</body>
+
+</html>
